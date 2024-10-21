@@ -1,10 +1,11 @@
-import { View, Text } from "react-native";
+import { Text } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Example = ()=>{
-  return(
-    // <View>
+const Example = () => {
+  return (
+    <SafeAreaView>
       <Text className="bg-amber-500">example</Text>
-    // </View>
+    </SafeAreaView>
   )
 }
 
