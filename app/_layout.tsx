@@ -6,9 +6,8 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { TouchableOpacity } from "react-native";
+import "../global.css"
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync().then();
 
@@ -22,7 +21,6 @@ export default function RootLayout() {
     if (loaded) {
       SplashScreen.hideAsync().then();
     }
-    console.log("XD")
   }, [loaded]);
 
   if (!loaded) {
