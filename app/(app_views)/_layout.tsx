@@ -19,16 +19,16 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color}/>
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="add-measurement"
         options={{
-          title: 'Explore',
+          title: 'Add Measurement',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'add-circle' : 'add-circle-outline'} color={color}/>
           ),
         }}
       />
