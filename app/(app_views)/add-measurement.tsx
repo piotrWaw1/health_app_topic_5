@@ -8,6 +8,7 @@ import NumberInput from "@/components/inputs/NumberInput";
 import RNDateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { useState } from "react";
 import { format } from "date-fns";
+import DatePicker from "@/components/inputs/DatePicker";
 
 const schema = object({
   bloodPressure: number()
@@ -34,6 +35,10 @@ export default function AddMeasurement() {
     console.log(request);
   }
 
+  const changeShowPicker = () => {
+    setShowPicker(!showPicker);
+  }
+
   const onChange = (event: DateTimePickerEvent, date?: Date) => {
     const { type } = event
     if (type === "set") {
@@ -43,7 +48,7 @@ export default function AddMeasurement() {
         form.setValue("date", new Date())
       }
     }
-    setShowPicker(!showPicker)
+    changeShowPicker()
   }
 
   return (
@@ -53,23 +58,12 @@ export default function AddMeasurement() {
         name="date"
         control={form.control}
         render={({ field }) => (
-          <View className="flex flex-row">
-            {showPicker &&
-                <RNDateTimePicker
-                    value={new Date(field.value)}
-                    onChange={onChange} mode="time"
-                    display="spinner"
-                    is24Hour={true}
-                />
-            }
-            <Text
-              className="border border-gray-400 rounded-l-xl p-2">{format(field.value, "HH:mm:ss dd-MM-yyyy")}</Text>
-            <Pressable className="p-2 bg-blue-500 hover:bg-blue-400 w-40 rounded-r-xl"
-                       onPress={() => setShowPicker((state) => !state)}>
-              <Text className="m-auto text-lg font-semibold text-white">Set time</Text>
-            </Pressable>
-          </View>
-
+          <DatePicker
+            changeShowPicker={changeShowPicker}
+            showPicker={showPicker}
+            field={field}
+            onChange={onChange}
+          />
         )}
       />
       <ThemedText type="defaultSemiBold">Blood pressure</ThemedText>
