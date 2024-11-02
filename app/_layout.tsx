@@ -32,7 +32,7 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <Stack>
           <Stack.Screen name="(app_views)" options={{ headerShown: false }}/>
-          <Stack.Screen name="tabs/index" options={{ headerShown: false }}/>
+          {/*<Stack.Screen name="tabs/index" options={{ headerShown: false }}/>*/}
           <Stack.Screen name="+not-found"/>
         </Stack>
       </SafeAreaProvider>
