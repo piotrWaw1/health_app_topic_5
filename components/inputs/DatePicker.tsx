@@ -1,7 +1,8 @@
 import RNDateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { format } from "date-fns";
 import { ControllerRenderProps, FieldValues, Path } from "react-hook-form";
+import { ThemedText } from "@/components/ThemedText";
 
 interface DatePickerProps<T extends FieldValues, TName extends Path<T>> {
   field: ControllerRenderProps<T, TName>;
@@ -24,12 +25,12 @@ export default function DatePicker<T extends FieldValues, TName extends Path<T>>
               is24Hour={true}
           />
       }
-      <Text className="border border-gray-400 rounded-l-xl p-2">
+      <ThemedText className="border border-gray-400 rounded-l-xl p-2">
         {format(field.value, "HH:mm dd-MM-yyyy")}
-      </Text>
+      </ThemedText>
       <Pressable disabled={disable} className="p-2 bg-blue-500 hover:bg-blue-400 rounded-r-xl w-48"
                  onPress={changeShowPicker}>
-        <Text className="m-auto text-lg font-semibold text-white">Set time</Text>
+        <ThemedText className="m-auto text-lg font-semibold text-white">Set time</ThemedText>
       </Pressable>
     </View>
   )

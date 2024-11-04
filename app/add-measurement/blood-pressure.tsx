@@ -9,6 +9,7 @@ import NumberInput from "@/components/inputs/NumberInput";
 import { Button } from "react-native";
 import { date, InferType, number, object } from "yup";
 import { Stack } from "expo-router";
+import ThemedSaveAreaView from "@/components/ThemedSaveAreaView";
 
 const schema = object({
   bloodPressure: number()
@@ -54,7 +55,7 @@ export default function BloodPressure() {
   return (
     <>
       <Stack.Screen options={{ title: 'Add blood pressure' }}/>
-      <SafeAreaView className="flex justify-center h-full px-14 bg-white">
+      <ThemedSaveAreaView>
         <ThemedText type="defaultSemiBold">Date</ThemedText>
         <Controller
           name="date"
@@ -77,7 +78,7 @@ export default function BloodPressure() {
           )}
         />
         <Button onPress={form.handleSubmit(onSubmit)} title={"Save"}/>
-      </SafeAreaView>
+      </ThemedSaveAreaView>
     </>
   )
 }
