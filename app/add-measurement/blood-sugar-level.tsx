@@ -39,7 +39,7 @@ export default function BloodSugarLevel() {
       <Stack.Screen options={{
         title: 'Add blood sugar level',
         headerStyle: {
-          backgroundColor: '#ea580c', // Change to your desired color
+          backgroundColor: '#ea580c',
         },
       }}/>
       <ThemedSaveAreaView>

@@ -39,7 +39,7 @@ export default function BloodOxygenLevel() {
       <Stack.Screen options={{
         title: 'Add blood oxygen level',
         headerStyle: {
-          backgroundColor: '#2563eb', // Change to your desired color
+          backgroundColor: '#2563eb',
         },
       }}/>
       <ThemedSaveAreaView>

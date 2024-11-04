@@ -39,7 +39,7 @@ export default function Weight() {
       <Stack.Screen options={{
         title: 'Add weight',
         headerStyle: {
-          backgroundColor: '#16a34a', // Change to your desired color
+          backgroundColor: '#16a34a',
         },
       }}/>
       <ThemedSaveAreaView>
