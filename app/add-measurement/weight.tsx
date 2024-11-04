@@ -36,7 +36,12 @@ export default function Weight() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Add weight' }}/>
+      <Stack.Screen options={{
+        title: 'Add weight',
+        headerStyle: {
+          backgroundColor: '#16a34a', // Change to your desired color
+        },
+      }}/>
       <ThemedSaveAreaView>
         <ThemedText type="defaultSemiBold">Date</ThemedText>
         <Controller

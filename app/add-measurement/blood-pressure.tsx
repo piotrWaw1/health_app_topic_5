@@ -36,7 +36,12 @@ export default function BloodPressure() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Add blood pressure' }}/>
+      <Stack.Screen options={{
+        title: 'Add blood pressure',
+        headerStyle: {
+          backgroundColor: '#dc2626', // Change to your desired color
+        },
+      }}/>
       <ThemedSaveAreaView>
         <ThemedText type="defaultSemiBold">Date</ThemedText>
         <Controller
