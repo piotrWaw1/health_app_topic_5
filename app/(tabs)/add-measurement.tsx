@@ -1,15 +1,12 @@
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { View } from "react-native";
 import { cn } from "@/components/utils/cn";
-import { useThemeColor } from "@/hooks/useThemeColor";
 import ThemedSaveAreaView from "@/components/ThemedSaveAreaView";
 
 const defaultClassLink = "text-white text-center p-2 rounded-xl font-bold text-lg"
 
 export default function AddMeasurement() {
-  const backgroundColor = useThemeColor({}, 'background');
 
   return (
     <ThemedSaveAreaView>
@@ -24,7 +21,7 @@ export default function AddMeasurement() {
         <Link className={cn(defaultClassLink, "bg-orange-600")} href="/add-measurement/blood-sugar-level">
           Blood sugar level
         </Link>
-        <Link className={cn(defaultClassLink, "bg-green-600")} href="/add-measurement/Weight">
+        <Link className={cn(defaultClassLink, "bg-green-600")} href="/add-measurement/weight">
           Weight
         </Link>
       </View>
