@@ -2,7 +2,6 @@ import { ThemedText } from "@/components/ThemedText";
 import { Stack } from "expo-router";
 import ThemedSaveAreaView from "@/components/ThemedSaveAreaView";
 import { date, InferType, number, object } from "yup";
-import useDatePicker from "@/hooks/useDatePicker";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import DatePicker from "@/components/inputs/DatePicker";
@@ -22,8 +21,6 @@ type BloodOxygenLevelRequest = InferType<typeof schema>;
 const defaultValues = { bloodOxygenLevel: undefined, date: new Date() };
 
 export default function BloodOxygenLevel() {
-  const { showPicker, changeShowPicker, onChange } = useDatePicker()
-
   const form = useForm<BloodOxygenLevelRequest>({
     resolver: yupResolver(schema),
     defaultValues,
@@ -49,12 +46,7 @@ export default function BloodOxygenLevel() {
           name="date"
           control={form.control}
           render={({ field }) => (
-            <DatePicker
-              changeShowPicker={changeShowPicker}
-              showPicker={showPicker}
-              field={field}
-              onChange={(event, date) => onChange(form, "date", event, date)}
-            />
+            <DatePicker field={field} fieldName={"date"} form={form}/>
           )}
         />
         <ThemedText type="defaultSemiBold">Blood oxygen level</ThemedText>

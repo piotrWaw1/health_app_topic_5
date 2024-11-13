@@ -7,7 +7,6 @@ import { Button } from "react-native";
 import { date, InferType, number, object } from "yup";
 import { Stack } from "expo-router";
 import ThemedSaveAreaView from "@/components/ThemedSaveAreaView";
-import useDatePicker from "@/hooks/useDatePicker";
 
 const schema = object({
   bloodPressure: number()
@@ -22,8 +21,6 @@ type BloodPressure = InferType<typeof schema>;
 const defaultValues = { bloodPressure: undefined, date: new Date() };
 
 export default function BloodPressure() {
-  const { showPicker, changeShowPicker, onChange } = useDatePicker()
-
   const form = useForm<BloodPressure>({
     resolver: yupResolver(schema),
     defaultValues,
@@ -49,12 +46,7 @@ export default function BloodPressure() {
           name="date"
           control={form.control}
           render={({ field }) => (
-            <DatePicker
-              changeShowPicker={changeShowPicker}
-              showPicker={showPicker}
-              field={field}
-              onChange={(event, date) => onChange(form, "date", event, date)}
-            />
+            <DatePicker field={field} fieldName={"date"} form={form}/>
           )}
         />
         <ThemedText type="defaultSemiBold">Blood pressure</ThemedText>

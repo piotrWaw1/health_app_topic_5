@@ -1,19 +1,32 @@
 import RNDateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Pressable, View } from "react-native";
 import { format } from "date-fns";
-import { ControllerRenderProps, FieldValues, Path } from "react-hook-form";
+import { ControllerRenderProps, FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { ThemedText } from "@/components/ThemedText";
+import { useState } from "react";
 
-interface DatePickerProps<T extends FieldValues, TName extends Path<T>> {
+interface DatePickerProps<T extends FieldValues, TName extends Path<T>, TForm extends Record<string, any>> {
   field: ControllerRenderProps<T, TName>;
-  onChange: (event: DateTimePickerEvent, date?: Date) => void;
-  changeShowPicker: () => void;
-  showPicker: boolean;
+  fieldName: Path<TForm>
+  form: UseFormReturn<TForm>,
   disable?: boolean;
 }
 
-export default function DatePicker<T extends FieldValues, TName extends Path<T>>(props: DatePickerProps<T, TName>) {
-  const { field, disable = false, onChange, changeShowPicker, showPicker } = props
+export default function DatePicker<T extends FieldValues, TName extends Path<T>, TForm extends Record<string, any>>(props: DatePickerProps<T, TName, TForm>) {
+  const { field, fieldName, form, disable = false } = props
+  const [showPicker, setShowPicker] = useState(false);
+
+  const changeShowPicker = () => {
+    setShowPicker(!showPicker);
+  }
+
+  const onChange = (event: DateTimePickerEvent, date?: Date) => {
+    const { type } = event
+    if (type === "set") {
+      form.setValue(fieldName, (date ?? new Date()) as any);
+    }
+    changeShowPicker()
+  }
 
   return (
     <View className="flex py-2 gap-2">
