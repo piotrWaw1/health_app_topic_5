@@ -41,6 +41,7 @@ export default function BloodSugarLevel() {
         headerStyle: {
           backgroundColor: '#ea580c',
         },
+        headerTintColor: '#ffffff',
       }}/>
       <ThemedSaveAreaView>
         <ThemedText type="defaultSemiBold">Date</ThemedText>

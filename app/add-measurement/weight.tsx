@@ -41,6 +41,7 @@ export default function Weight() {
         headerStyle: {
           backgroundColor: '#16a34a',
         },
+        headerTintColor: '#ffffff',
       }}/>
       <ThemedSaveAreaView>
         <ThemedText type="defaultSemiBold">Date</ThemedText>

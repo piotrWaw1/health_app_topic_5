@@ -12,8 +12,8 @@ import { Button } from "react-native";
 const schema = object({
   bloodOxygenLevel: number()
     .transform((value) => (isNaN(value) ? undefined : value))
-    .positive('Blood pressure must be a positive number')
-    .required('Blood pressure is required'),
+    .positive('Blood oxygen must be a positive number')
+    .required('Blood oxygen is required'),
   date: date().required(),
 })
 
@@ -41,6 +41,7 @@ export default function BloodOxygenLevel() {
         headerStyle: {
           backgroundColor: '#2563eb',
         },
+        headerTintColor: '#ffffff',
       }}/>
       <ThemedSaveAreaView>
         <ThemedText type="defaultSemiBold">Date</ThemedText>

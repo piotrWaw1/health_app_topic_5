@@ -41,6 +41,7 @@ export default function BloodPressure() {
         headerStyle: {
           backgroundColor: '#dc2626',
         },
+        headerTintColor: '#ffffff',
       }}/>
       <ThemedSaveAreaView>
         <ThemedText type="defaultSemiBold">Date</ThemedText>
