@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import DatePicker from "@/components/inputs/DatePicker";
 import NumberInput from "@/components/inputs/NumberInput";
 import { Button } from "react-native";
+import { useStorageContext } from "@/context/StorageContext";
 
 const schema = object({
   bloodSugarLevel: number()
@@ -21,6 +22,7 @@ type BloodSugarLevelRequest = InferType<typeof schema>;
 const defaultValues = { bloodSugarLevel: undefined, date: new Date() };
 
 export default function BloodSugarLevel() {
+  const { setItem } = useStorageContext()
   const form = useForm<BloodSugarLevelRequest>({
     resolver: yupResolver(schema),
     defaultValues,
@@ -28,7 +30,8 @@ export default function BloodSugarLevel() {
   })
 
   const onSubmit = (request: BloodSugarLevelRequest) => {
-    console.log(request);
+    const { bloodSugarLevel, date } = request;
+    setItem("bloodSugarLevel", { value: bloodSugarLevel, date: date })
   }
 
   return (

@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import DatePicker from "@/components/inputs/DatePicker";
 import NumberInput from "@/components/inputs/NumberInput";
 import { Button } from "react-native";
+import { useStorageContext } from "@/context/StorageContext";
 
 const schema = object({
   bloodOxygenLevel: number()
@@ -21,6 +22,7 @@ type BloodOxygenLevelRequest = InferType<typeof schema>;
 const defaultValues = { bloodOxygenLevel: undefined, date: new Date() };
 
 export default function BloodOxygenLevel() {
+  const { setItem } = useStorageContext()
   const form = useForm<BloodOxygenLevelRequest>({
     resolver: yupResolver(schema),
     defaultValues,
@@ -28,7 +30,8 @@ export default function BloodOxygenLevel() {
   })
 
   const onSubmit = (request: BloodOxygenLevelRequest) => {
-    console.log(request);
+    const { bloodOxygenLevel, date } = request;
+    setItem("bloodOxygenLevel", { value: bloodOxygenLevel, date: date })
   }
 
   return (
@@ -46,7 +49,7 @@ export default function BloodOxygenLevel() {
           name="date"
           control={form.control}
           render={({ field }) => (
-            <DatePicker field={field} fieldName={"date"} form={form}/>
+            <DatePicker field={field} fieldName={field.name} form={form}/>
           )}
         />
         <ThemedText type="defaultSemiBold">Blood oxygen level</ThemedText>

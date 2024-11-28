@@ -7,6 +7,7 @@ import { Button } from "react-native";
 import { date, InferType, number, object } from "yup";
 import { Stack } from "expo-router";
 import ThemedSaveAreaView from "@/components/ThemedSaveAreaView";
+import { useStorageContext } from "@/context/StorageContext";
 
 const schema = object({
   bloodPressure: number()
@@ -21,16 +22,18 @@ type BloodPressure = InferType<typeof schema>;
 const defaultValues = { bloodPressure: undefined, date: new Date() };
 
 export default function BloodPressure() {
+  const { setItem, getAllItems } = useStorageContext()
   const form = useForm<BloodPressure>({
     resolver: yupResolver(schema),
     defaultValues,
     mode: "onTouched"
   })
 
-  const onSubmit = (request: BloodPressure) => {
-    console.log(request);
+  const onSubmit = async (request: BloodPressure) => {
+    const { bloodPressure, date } = request;
+    setItem("bloodPressure", { value: bloodPressure, date: date })
   }
-
+  getAllItems()
   return (
     <>
       <Stack.Screen options={{

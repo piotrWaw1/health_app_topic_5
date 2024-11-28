@@ -1,0 +1,1 @@
+export type DataKeys = "bloodOxygenLevel" | "bloodPressure" | "bloodSugarLevel" | "weight"

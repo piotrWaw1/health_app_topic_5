@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import DatePicker from "@/components/inputs/DatePicker";
 import NumberInput from "@/components/inputs/NumberInput";
 import { Button } from "react-native";
+import { useStorageContext } from "@/context/StorageContext";
 
 const schema = object({
   weight: number()
@@ -21,6 +22,7 @@ type WeightRequest = InferType<typeof schema>;
 const defaultValues = { weight: undefined, date: new Date() };
 
 export default function Weight() {
+  const { setItem } = useStorageContext()
   const form = useForm<WeightRequest>({
     resolver: yupResolver(schema),
     defaultValues,
@@ -28,7 +30,8 @@ export default function Weight() {
   })
 
   const onSubmit = (request: WeightRequest) => {
-    console.log(request);
+    const { weight, date } = request;
+    setItem("weight", { value: weight, date: date })
   }
 
   return (
