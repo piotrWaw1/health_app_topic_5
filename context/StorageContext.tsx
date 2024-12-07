@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { ReactNode } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DataKeys } from "@/types/DataKeys";
@@ -10,11 +10,21 @@ export interface ItemType {
 }
 
 type StorageContextData = {
+  bloodOxygenLevel: null | ItemType[];
+  bloodPressure: null | ItemType[];
+  bloodSugarLevel: null | ItemType[];
+  weight: null | ItemType[];
   setItem: (key: DataKeys, item: ItemType) => void;
+  fetchData: () => void;
 }
 
 const initState: StorageContextData = {
+  bloodOxygenLevel: null,
+  bloodPressure: null,
+  bloodSugarLevel: null,
+  weight: null,
   setItem: async () => undefined,
+  fetchData: async () => undefined,
 }
 
 export const clear = async () => {
@@ -25,10 +35,36 @@ export const clear = async () => {
   }
 };
 
+// SecureStore.deleteItemAsync(DataKeys.weight).then()
+// SecureStore.deleteItemAsync(DataKeys.bloodPressure).then()
+// SecureStore.deleteItemAsync(DataKeys.bloodSugarLevel).then()
+// SecureStore.deleteItemAsync(DataKeys.bloodOxygenLevel).then()
+
 const StorageContext = createContext<StorageContextData>(initState);
 export const useStorageContext = () => useContext(StorageContext);
 
 export const StorageProvider = ({ children }: { children: ReactNode }) => {
+
+  const [bloodOxygenLevel, setBloodOxygenLevel] = useState<null | ItemType[]>(null);
+  const [bloodPressure, setBloodPressure] = useState<null | ItemType[]>(null);
+  const [bloodSugarLevel, setBloodSugarLevel] = useState<null | ItemType[]>(null);
+  const [weight, setWeight] = useState<null | ItemType[]>(null);
+
+  const fetchData = async () => {
+    try {
+      const oxygenLevel = await SecureStore.getItemAsync("bloodOxygenLevel");
+      const pressure = await SecureStore.getItemAsync("bloodPressure");
+      const sugarLevel = await SecureStore.getItemAsync("bloodSugarLevel");
+      const userWeight = await SecureStore.getItemAsync("weight");
+
+      setBloodOxygenLevel(oxygenLevel ? JSON.parse(oxygenLevel) : null);
+      setBloodPressure(pressure ? JSON.parse(pressure) : null);
+      setBloodSugarLevel(sugarLevel ? JSON.parse(sugarLevel) : null);
+      setWeight(userWeight ? JSON.parse(userWeight) : null);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const setItem = async (key: DataKeys, item: ItemType) => {
     try {
@@ -54,7 +90,12 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const contextData: StorageContextData = {
+    bloodOxygenLevel,
+    bloodPressure,
+    bloodSugarLevel,
+    weight,
     setItem,
+    fetchData,
   }
 
   return (
