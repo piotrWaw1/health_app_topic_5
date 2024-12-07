@@ -8,6 +8,7 @@ import DatePicker from "@/components/inputs/DatePicker";
 import NumberInput from "@/components/inputs/NumberInput";
 import { Button } from "react-native";
 import { useStorageContext } from "@/context/StorageContext";
+import { DataKeys } from "@/types/DataKeys";
 
 const schema = object({
   weight: number()
@@ -31,7 +32,7 @@ export default function Weight() {
 
   const onSubmit = (request: WeightRequest) => {
     const { weight, date } = request;
-    setItem("weight", { value: weight, date: date })
+    setItem(DataKeys.weight, { value: weight, date: date })
   }
 
   return (

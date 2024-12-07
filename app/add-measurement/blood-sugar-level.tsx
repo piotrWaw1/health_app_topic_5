@@ -8,6 +8,7 @@ import DatePicker from "@/components/inputs/DatePicker";
 import NumberInput from "@/components/inputs/NumberInput";
 import { Button } from "react-native";
 import { useStorageContext } from "@/context/StorageContext";
+import { DataKeys } from "@/types/DataKeys";
 
 const schema = object({
   bloodSugarLevel: number()
@@ -31,7 +32,7 @@ export default function BloodSugarLevel() {
 
   const onSubmit = (request: BloodSugarLevelRequest) => {
     const { bloodSugarLevel, date } = request;
-    setItem("bloodSugarLevel", { value: bloodSugarLevel, date: date })
+    setItem(DataKeys.bloodSugarLevel, { value: bloodSugarLevel, date: date })
   }
 
   return (
