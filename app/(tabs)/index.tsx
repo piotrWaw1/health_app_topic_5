@@ -42,11 +42,35 @@ export default function MainScreen() {
 
   return (
     <ParallaxScrollView>
-      <SafeAreaView>
-        <ShowData data={bloodOxygenLevel} title="Blood oxygen"/>
-        <ShowData data={bloodPressure} title="bloodPressure"/>
-        <ShowData data={bloodSugarLevel} title="Blood sugar"/>
-        <ShowData data={weight} title="Weight"/>
+      <SafeAreaView className="gap-4">
+        <ShowData
+          data={bloodPressure}
+          title="Blood pressure"
+          containerClass={"bg-red-600/70"}
+          titleClass={"bg-red-600"}
+          style={{ color: "white" }}
+        />
+        <ShowData
+          data={bloodOxygenLevel}
+          title="Blood oxygen"
+          containerClass={"bg-blue-600/70"}
+          titleClass={"bg-blue-600"}
+          style={{ color: "white" }}
+        />
+        <ShowData
+          data={bloodSugarLevel}
+          title="Blood sugar"
+          containerClass={"bg-orange-600/70"}
+          titleClass={"bg-orange-600"}
+          style={{ color: "white" }}
+        />
+        <ShowData
+          data={weight}
+          title="Weight"
+          containerClass={"bg-green-600/70"}
+          titleClass={"bg-green-600"}
+          style={{ color: "white" }}
+        />
       </SafeAreaView>
     </ParallaxScrollView>
   )
