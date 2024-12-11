@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from "react";
 import { ReactNode } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DataKeys } from "@/types/DataKeys";
 import * as SecureStore from 'expo-secure-store';
 
@@ -26,14 +25,6 @@ const initState: StorageContextData = {
   setItem: async () => undefined,
   fetchData: async () => undefined,
 }
-
-export const clear = async () => {
-  try {
-    await AsyncStorage.clear();
-  } catch (error) {
-    console.error('Error clearing AsyncStorage:', error);
-  }
-};
 
 // SecureStore.deleteItemAsync(DataKeys.weight).then()
 // SecureStore.deleteItemAsync(DataKeys.bloodPressure).then()
