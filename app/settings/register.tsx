@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, TextInput } from "react-native";
 import { cn } from "@/components/utils/cn";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import axios from "axios";
 
 const schema = object({
   email: string().email().required(),
@@ -27,8 +28,15 @@ export default function Register() {
     mode: "onTouched"
   })
 
-  const onSubmit = (request: LoginRequest) => {
-    console.log(request)
+  const onSubmit = async (request: LoginRequest) => {
+    try {
+      const { data } = await axios.post("/register", request)
+      console.log(data)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error)
+      }
+    }
   }
 
   return (

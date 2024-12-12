@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, TextInput } from "react-native";
 import { cn } from "@/components/utils/cn";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { useSessionContext } from "@/context/SessionContext";
 
 
 const schema = object({
@@ -14,21 +15,21 @@ const schema = object({
   password: string().required(),
 })
 
-type LoginRequest = InferType<typeof schema>;
+export type LoginRequest = InferType<typeof schema>;
 
-const defaultValues = { email: "", password: "" };
+const defaultValues = { email: "a@a.com", password: "123" };
 
 export default function Login() {
   const backgroundColor = useThemeColor({}, 'background');
-
+  const { login } = useSessionContext()
   const form = useForm<LoginRequest>({
     resolver: yupResolver(schema),
     defaultValues,
     mode: "onTouched"
   })
 
-  const onSubmit = (request: LoginRequest) => {
-    console.log(request)
+  const onSubmit = async (request: LoginRequest) => {
+    login(request)
   }
 
   return (
