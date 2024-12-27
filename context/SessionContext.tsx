@@ -31,7 +31,6 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
         console.log(error)
       }
     }
-
   }
 
   const removeToken = async () => {

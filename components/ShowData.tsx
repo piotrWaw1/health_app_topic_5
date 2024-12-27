@@ -21,9 +21,19 @@ export default function ShowData(props: ShowDataProps) {
   const { fetchData } = useStorageContext()
 
   const deleteItem = async (key: string, itemId: number) => {
-    const finalData = itemId === 0 ? null : data?.splice(itemId);
-    await SecureStore.setItemAsync(key, JSON.stringify(finalData));
+    if (data){
+      const copy = [...data]
+      copy?.splice(itemId, 1)
+      if (copy.length >= 1) {
+        await SecureStore.setItemAsync(key, JSON.stringify(copy));
+      } else {
+        await SecureStore.deleteItemAsync(key);
+      }
+    }
     fetchData();
+  }
+
+  const saveItem = async (key: string, itemId: number) => {
   }
 
   return (
@@ -42,9 +52,14 @@ export default function ShowData(props: ShowDataProps) {
               <ThemedText style={style}>Date: {format(item.date, "dd-MM-yyyy HH:mm")}</ThemedText>
               <ThemedText style={style}>Value: {item.value}</ThemedText>
             </View>
-            <Pressable className="bg-white/70 p-2 rounded-xl" onPress={() => deleteItem(keyItem, index)}>
-              <TabBarIcon name='trash'/>
-            </Pressable>
+            <View className="flex flex-row gap-2">
+              <Pressable className="bg-white/70 p-2 rounded-xl" onPress={() => deleteItem(keyItem, index)}>
+                <TabBarIcon name='send'/>
+              </Pressable>
+              <Pressable className="bg-white/70 p-2 rounded-xl" onPress={() => deleteItem(keyItem, index)}>
+                <TabBarIcon name='trash'/>
+              </Pressable>
+            </View>
           </View>
         )) || <ThemedText className="p-2" style={style}>No data</ThemedText>
       }

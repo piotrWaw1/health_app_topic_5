@@ -6,6 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 export interface ItemType {
   value: number;
   date: Date;
+  id?: number;
 }
 
 type StorageContextData = {
@@ -67,12 +68,12 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
         if (index !== -1) {
           parse_data[index].value = item.value;
         } else {
-          parse_data.push(item);
+          parse_data.push({ ...item, id: undefined });
         }
 
         await SecureStore.setItemAsync(key, JSON.stringify(parse_data));
       } else {
-        const itemToSave = [item]
+        const itemToSave = [{ ...item, id: undefined }]
         await SecureStore.setItemAsync(key, JSON.stringify(itemToSave));
       }
     } catch (error) {
