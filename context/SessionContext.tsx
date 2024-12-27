@@ -6,11 +6,13 @@ import { LoginRequest } from "@/app/settings/login";
 type SessionContextData = {
   token: string | null;
   login: (request: LoginRequest) => void;
+  removeToken: () => void;
 }
 
 const initState: SessionContextData = {
   token: null,
   login: () => undefined,
+  removeToken: () => undefined,
 }
 
 const SessionContext = createContext<SessionContextData>(initState);
@@ -22,7 +24,8 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const login = async (request: LoginRequest) => {
     try {
       const { data } = await axios.post("/login", request)
-      console.log(data)
+      await SecureStore.setItemAsync("token", data.token)
+      setToken(data.token)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error)
@@ -31,10 +34,15 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
 
   }
 
+  const removeToken = async () => {
+    await SecureStore.deleteItemAsync("token");
+    setToken(null);
+  }
 
   const contextData: SessionContextData = {
     token,
-    login
+    login,
+    removeToken
   }
 
   return (
