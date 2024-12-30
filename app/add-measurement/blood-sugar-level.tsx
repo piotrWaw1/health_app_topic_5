@@ -32,7 +32,7 @@ export default function BloodSugarLevel() {
 
   const onSubmit = (request: BloodSugarLevelRequest) => {
     const { bloodSugarLevel, date } = request;
-    setItem(DataKeys.bloodSugarLevel, { value: bloodSugarLevel, date: date })
+    setItem(DataKeys.bloodSugarLevel, { value: bloodSugarLevel, date: date, id: undefined })
   }
 
   return (

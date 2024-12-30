@@ -32,7 +32,7 @@ export default function BloodPressure() {
 
   const onSubmit = async (request: BloodPressure) => {
     const { bloodPressure, date } = request;
-    setItem(DataKeys.bloodPressure, { value: bloodPressure, date: date })
+    setItem(DataKeys.bloodPressure, { value: bloodPressure, date: date, id: undefined })
   }
 
   return (

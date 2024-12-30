@@ -8,6 +8,7 @@ import { Button, TextInput } from "react-native";
 import { cn } from "@/components/utils/cn";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useSessionContext } from "@/context/SessionContext";
+import { useState } from "react";
 
 
 const schema = object({
@@ -20,6 +21,7 @@ export type LoginRequest = InferType<typeof schema>;
 const defaultValues = { email: "a@a.com", password: "123" };
 
 export default function Login() {
+  const [isFetching, setIsFetching] = useState(false);
   const backgroundColor = useThemeColor({}, 'background');
   const { login } = useSessionContext()
   const form = useForm<LoginRequest>({
@@ -29,7 +31,9 @@ export default function Login() {
   })
 
   const onSubmit = async (request: LoginRequest) => {
+    setIsFetching(true)
     login(request)
+    setIsFetching(false)
   }
 
   return (
@@ -68,7 +72,7 @@ export default function Login() {
             />
           )}
         />
-        <Button onPress={form.handleSubmit(onSubmit)} title={"Login"}/>
+        <Button onPress={form.handleSubmit(onSubmit)} title={"Login"} disabled={isFetching}/>
       </ThemedSaveAreaView>
     </>
   )

@@ -6,6 +6,8 @@ import React, { ReactNode } from "react";
 import { cn } from "@/components/utils/cn";
 import * as SecureStore from "expo-secure-store";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import axios from "axios";
+import { DataKeys } from "@/types/DataKeys";
 
 interface ShowDataProps {
   data: null | ItemType[];
@@ -13,19 +15,23 @@ interface ShowDataProps {
   containerClass?: string;
   titleClass?: string;
   style?: StyleProp<TextStyle>;
-  keyItem: string;
+  keyItem: DataKeys;
+  endpoint: string;
 }
 
 export default function ShowData(props: ShowDataProps) {
-  const { data, title, containerClass, titleClass, style, keyItem } = props
-  const { fetchData } = useStorageContext()
+  const { data, title, containerClass, titleClass, style, keyItem, endpoint } = props
+  const { fetchData, setItem } = useStorageContext()
 
   const deleteItem = async (key: string, itemId: number) => {
-    if (data){
+    if (data) {
       const copy = [...data]
-      copy?.splice(itemId, 1)
+      const itemToDelete = copy?.splice(itemId, 1)[0]
       if (copy.length >= 1) {
         await SecureStore.setItemAsync(key, JSON.stringify(copy));
+        if (itemToDelete.id) {
+          await axios.delete(`${endpoint}/${itemToDelete.id}`)
+        }
       } else {
         await SecureStore.deleteItemAsync(key);
       }
@@ -33,7 +39,24 @@ export default function ShowData(props: ShowDataProps) {
     fetchData();
   }
 
-  const saveItem = async (key: string, itemId: number) => {
+  const updateId = (serverId: number, itemId: number) => {
+    if (data) {
+      const item = data[itemId]
+      setItem(keyItem, { ...item, id: serverId })
+    }
+  }
+
+  const saveOnline = async (item: ItemType, itemId: number) => {
+    try {
+      const { data } = await axios.post(endpoint, item)
+      updateId(data.id, itemId)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error)
+      }
+    } finally {
+      fetchData();
+    }
   }
 
   return (
@@ -53,9 +76,14 @@ export default function ShowData(props: ShowDataProps) {
               <ThemedText style={style}>Value: {item.value}</ThemedText>
             </View>
             <View className="flex flex-row gap-2">
-              <Pressable className="bg-white/70 p-2 rounded-xl" onPress={() => deleteItem(keyItem, index)}>
-                <TabBarIcon name='send'/>
-              </Pressable>
+              {!item.id &&
+                  <Pressable className="bg-white/70 p-2 rounded-xl" onPress={() => saveOnline(item, index)}>
+                      <TabBarIcon name='send'/>
+                  </Pressable>
+              }
+              {item.id &&
+                  <ThemedText>Saved</ThemedText>
+              }
               <Pressable className="bg-white/70 p-2 rounded-xl" onPress={() => deleteItem(keyItem, index)}>
                 <TabBarIcon name='trash'/>
               </Pressable>

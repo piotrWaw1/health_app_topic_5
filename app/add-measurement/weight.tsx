@@ -32,7 +32,7 @@ export default function Weight() {
 
   const onSubmit = (request: WeightRequest) => {
     const { weight, date } = request;
-    setItem(DataKeys.weight, { value: weight, date: date })
+    setItem(DataKeys.weight, { value: weight, date: date, id: undefined })
   }
 
   return (

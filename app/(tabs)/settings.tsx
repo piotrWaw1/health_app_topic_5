@@ -9,8 +9,7 @@ const defaultClassLink = "text-white text-center p-2 rounded-xl font-bold text-l
 
 export default function Settings() {
   const { token, removeToken } = useSessionContext()
-  console.log(token)
-  console.log("XD")
+
   return (
     <ThemedSaveAreaView>
       <ThemedText type="title">Settings</ThemedText>
@@ -25,7 +24,7 @@ export default function Settings() {
                 </Link>
             </>
           ||
-            <Link className={cn(defaultClassLink, "bg-orange-600")} onPress={removeToken} href="">
+            <Link className={cn(defaultClassLink, "bg-orange-600")} onPress={removeToken} href="/">
                 Log out
             </Link>
         }

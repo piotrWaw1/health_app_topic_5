@@ -32,7 +32,7 @@ export default function BloodOxygenLevel() {
 
   const onSubmit = (request: BloodOxygenLevelRequest) => {
     const { bloodOxygenLevel, date } = request;
-    setItem(DataKeys.bloodOxygenLevel, { value: bloodOxygenLevel, date: date })
+    setItem(DataKeys.bloodOxygenLevel, { value: bloodOxygenLevel, date: date, id: undefined })
   }
 
   return (

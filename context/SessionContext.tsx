@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 import axios from "axios";
 import { LoginRequest } from "@/app/settings/login";
+import { useRouter } from "expo-router";
 
 type SessionContextData = {
   token: string | null;
@@ -20,12 +21,14 @@ export const useSessionContext = () => useContext(SessionContext);
 
 export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState(SecureStore.getItem("token"));
+  const router = useRouter();
 
   const login = async (request: LoginRequest) => {
     try {
       const { data } = await axios.post("/login", request)
       await SecureStore.setItemAsync("token", data.token)
       setToken(data.token)
+      router.replace("(tabs)")
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error)
@@ -36,6 +39,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const removeToken = async () => {
     await SecureStore.deleteItemAsync("token");
     setToken(null);
+    router.replace("(tabs)")
   }
 
   const contextData: SessionContextData = {

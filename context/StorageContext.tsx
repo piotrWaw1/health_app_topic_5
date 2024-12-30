@@ -41,13 +41,12 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
   const [bloodPressure, setBloodPressure] = useState<null | ItemType[]>(null);
   const [bloodSugarLevel, setBloodSugarLevel] = useState<null | ItemType[]>(null);
   const [weight, setWeight] = useState<null | ItemType[]>(null);
-
   const fetchData = async () => {
     try {
-      const oxygenLevel = await SecureStore.getItemAsync("bloodOxygenLevel");
-      const pressure = await SecureStore.getItemAsync("bloodPressure");
-      const sugarLevel = await SecureStore.getItemAsync("bloodSugarLevel");
-      const userWeight = await SecureStore.getItemAsync("weight");
+      const oxygenLevel = await SecureStore.getItemAsync(DataKeys.bloodOxygenLevel);
+      const pressure = await SecureStore.getItemAsync(DataKeys.bloodPressure);
+      const sugarLevel = await SecureStore.getItemAsync(DataKeys.bloodSugarLevel);
+      const userWeight = await SecureStore.getItemAsync(DataKeys.weight);
 
       setBloodOxygenLevel(oxygenLevel ? JSON.parse(oxygenLevel) : null);
       setBloodPressure(pressure ? JSON.parse(pressure) : null);
@@ -66,14 +65,13 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
         const index = parse_data.findIndex(i => new Date(i.date).getTime() === new Date(item.date).getTime());
 
         if (index !== -1) {
-          parse_data[index].value = item.value;
+          parse_data[index] = { ...item };
         } else {
-          parse_data.push({ ...item, id: undefined });
+          parse_data.push({ ...item });
         }
-
         await SecureStore.setItemAsync(key, JSON.stringify(parse_data));
       } else {
-        const itemToSave = [{ ...item, id: undefined }]
+        const itemToSave = [{ ...item }]
         await SecureStore.setItemAsync(key, JSON.stringify(itemToSave));
       }
     } catch (error) {
