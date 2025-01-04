@@ -2,12 +2,14 @@ import { ThemedText } from "@/components/ThemedText";
 import { Pressable, StyleProp, TextStyle, View } from "react-native";
 import { format } from "date-fns";
 import { ItemType, useStorageContext } from "@/context/StorageContext";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useCallback, useState } from "react";
 import { cn } from "@/components/utils/cn";
 import * as SecureStore from "expo-secure-store";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import axios from "axios";
 import { DataKeys } from "@/types/DataKeys";
+import { useFocusEffect } from "expo-router";
+import { useSessionContext } from "@/context/SessionContext";
 
 interface ShowDataProps {
   data: null | ItemType[];
@@ -19,9 +21,21 @@ interface ShowDataProps {
   endpoint: string;
 }
 
+interface ServerData {
+  blood_pressure?: string;
+  blood_oxygen?: string;
+  blood_sugar?: string;
+  weight?: string;
+  date: Date;
+  id: number;
+  user_id: number;
+}
+
 export default function ShowData(props: ShowDataProps) {
   const { data, title, containerClass, titleClass, style, keyItem, endpoint } = props
   const { fetchData, setItem } = useStorageContext()
+  const [downloadedData, setDownloadedData] = useState<ServerData[]>()
+  const { token } = useSessionContext()
 
   const deleteItem = async (key: string, itemId: number) => {
     if (data) {
@@ -29,15 +43,33 @@ export default function ShowData(props: ShowDataProps) {
       const itemToDelete = copy?.splice(itemId, 1)[0]
       if (copy.length >= 1) {
         await SecureStore.setItemAsync(key, JSON.stringify(copy));
-        if (itemToDelete.id) {
-          await axios.delete(`${endpoint}/${itemToDelete.id}`)
-        }
       } else {
         await SecureStore.deleteItemAsync(key);
       }
     }
     fetchData();
   }
+
+  const getData = async () => {
+    try {
+      const { data } = await axios.get<ServerData[]>(endpoint);
+      setDownloadedData(data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      if (token) {
+        getData().then();
+      } else {
+        setDownloadedData(undefined)
+      }
+    }, [token, endpoint]) // Dependencies that should trigger a re-fetch
+  );
 
   const updateId = (serverId: number, itemId: number) => {
     if (data) {
@@ -50,12 +82,24 @@ export default function ShowData(props: ShowDataProps) {
     try {
       const { data } = await axios.post(endpoint, item)
       updateId(data.id, itemId)
+      getData().then()
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error)
       }
     } finally {
       fetchData();
+    }
+  }
+
+  const deleteItemOnline = async (endpoint: string, itemId: number) => {
+    try {
+      await axios.delete(`${endpoint}/${itemId}`)
+      getData().then()
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error)
+      }
     }
   }
 
@@ -91,6 +135,26 @@ export default function ShowData(props: ShowDataProps) {
           </View>
         )) || <ThemedText className="p-2" style={style}>No data</ThemedText>
       }
+
+      {downloadedData?.length &&
+          <View>
+              <ThemedText>Downloaded data</ThemedText>
+            {downloadedData?.map((item, index) => (
+              <View key={index} className="p-2 flex flex-row justify-between items-center">
+                <View>
+                  <ThemedText style={style}>Date: {format(item.date, "dd-MM-yyyy HH:mm")}</ThemedText>
+                  <ThemedText
+                    style={style}>Value: {item.blood_pressure || item.blood_oxygen || item.blood_sugar || item.weight}</ThemedText>
+                </View>
+                <View className="flex flex-row gap-2">
+                  <Pressable className="bg-white/70 p-2 rounded-xl" onPress={() => deleteItemOnline(endpoint, item.id)}>
+                    <TabBarIcon name='trash'/>
+                  </Pressable>
+                </View>
+              </View>
+            ))}
+          </View>
+        || null}
     </View>
   )
 }

@@ -28,6 +28,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
       const { data } = await axios.post("/login", request)
       await SecureStore.setItemAsync("token", data.token)
       setToken(data.token)
+      // @ts-ignore
       router.replace("(tabs)")
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -39,6 +40,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const removeToken = async () => {
     await SecureStore.deleteItemAsync("token");
     setToken(null);
+    // @ts-ignore
     router.replace("(tabs)")
   }
 
