@@ -10,6 +10,7 @@ import axios from "axios";
 import { DataKeys } from "@/types/DataKeys";
 import { useFocusEffect } from "expo-router";
 import { useSessionContext } from "@/context/SessionContext";
+import * as Notifications from 'expo-notifications';
 
 interface ShowDataProps {
   data: null | ItemType[];
@@ -47,6 +48,7 @@ export default function ShowData(props: ShowDataProps) {
         await SecureStore.deleteItemAsync(key);
       }
     }
+    showNotification().then();
     fetchData();
   }
 
@@ -60,6 +62,17 @@ export default function ShowData(props: ShowDataProps) {
       }
     }
   }
+
+  const showNotification = async () => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: 'Deleted!',
+        body: 'Item deleted!',
+        data: { someData: 'Some data' },
+      },
+      trigger: null, // Immediate notification
+    });
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -96,6 +109,7 @@ export default function ShowData(props: ShowDataProps) {
     try {
       await axios.delete(`${endpoint}/${itemId}`)
       getData().then()
+      showNotification().then();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error)

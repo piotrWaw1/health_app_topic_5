@@ -10,9 +10,19 @@ import "../global.css"
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StorageProvider } from "@/context/StorageContext";
 import { SessionProvider } from "@/context/SessionContext";
+import * as Notifications from 'expo-notifications';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync().then();
 
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -20,7 +30,19 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+
   useEffect(() => {
+    const requestNotificationPermission = async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status === 'granted') {
+        console.log('Notification permissions granted!');
+      } else {
+        console.log('Notification permissions denied.');
+      }
+    };
+
+    requestNotificationPermission().then();
+
     if (loaded) {
       SplashScreen.hideAsync().then();
     }
@@ -29,6 +51,14 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(notification => {
+      console.log('Notification received:', notification);
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   return (
     <SessionProvider>
