@@ -41,24 +41,24 @@ export default function RootLayout() {
       }
     };
 
+    const subscription = Notifications.addNotificationReceivedListener(notification => {
+      console.log('Notification received:', notification);
+    });
+
+
+
     requestNotificationPermission().then();
 
     if (loaded) {
       SplashScreen.hideAsync().then();
     }
+
+    return () => subscription.remove();
   }, [loaded]);
 
   if (!loaded) {
     return null;
   }
-
-  useEffect(() => {
-    const subscription = Notifications.addNotificationReceivedListener(notification => {
-      console.log('Notification received:', notification);
-    });
-
-    return () => subscription.remove();
-  }, []);
 
   return (
     <SessionProvider>
