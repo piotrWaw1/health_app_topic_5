@@ -11,6 +11,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StorageProvider } from "@/context/StorageContext";
 import { SessionProvider } from "@/context/SessionContext";
 import * as Notifications from 'expo-notifications';
+import CameraComponent from "@/components/lab4/CameraComponent";
+import LocationComponents from "@/components/lab4/LocationComponents";
+import ContactsComponent from "@/components/lab4/ContactsComponent";
+import { View } from "react-native";
+import RecordComponent from "@/components/lab4/audio/RecordComponent";
+
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync().then();
@@ -30,7 +36,6 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-
   useEffect(() => {
     const requestNotificationPermission = async () => {
       const { status } = await Notifications.requestPermissionsAsync();
@@ -46,19 +51,19 @@ export default function RootLayout() {
     if (loaded) {
       SplashScreen.hideAsync().then();
     }
+
+    const subscription = Notifications.addNotificationReceivedListener(notification => {
+      console.log('Notification received:', notification);
+    });
+
+    return () => subscription.remove();
+
   }, [loaded]);
 
   if (!loaded) {
     return null;
   }
 
-  useEffect(() => {
-    const subscription = Notifications.addNotificationReceivedListener(notification => {
-      console.log('Notification received:', notification);
-    });
-
-    return () => subscription.remove();
-  }, []);
 
   return (
     <SessionProvider>
@@ -69,9 +74,14 @@ export default function RootLayout() {
               <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
               <Stack.Screen name="+not-found"/>
             </Stack>
+            {/*<CameraComponent/>*/}
+            {/*<LocationComponents/>*/}
+            {/*<ContactsComponent/>*/}
+            {/*<RecordComponent/>*/}
           </StorageProvider>
         </SafeAreaProvider>
       </ThemeProvider>
     </SessionProvider>
   );
 }
+

@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import axios from "axios";
 import { LoginRequest } from "@/app/settings/login";
 import { useRouter } from "expo-router";
+import { getLocales, getCalendars } from 'expo-localization';
 
 type SessionContextData = {
   token: string | null;
@@ -22,7 +23,6 @@ export const useSessionContext = () => useContext(SessionContext);
 export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState(SecureStore.getItem("token"));
   const router = useRouter();
-
   const login = async (request: LoginRequest) => {
     try {
       const { data } = await axios.post("/login", request)
