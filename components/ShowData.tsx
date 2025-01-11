@@ -134,7 +134,7 @@ export default function ShowData(props: ShowDataProps) {
               <ThemedText style={style}>Value: {item.value}</ThemedText>
             </View>
             <View className="flex flex-row gap-2">
-              {!item.id &&
+              {!item.id && token &&
                   <Pressable className="bg-white/70 p-2 rounded-xl" onPress={() => saveOnline(item, index)}>
                       <TabBarIcon name='send'/>
                   </Pressable>
