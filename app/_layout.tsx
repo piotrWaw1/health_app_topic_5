@@ -1,4 +1,3 @@
-import "@/utils/init-axios"
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -14,7 +13,6 @@ import * as Notifications from 'expo-notifications';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync().then();
-
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -46,19 +44,18 @@ export default function RootLayout() {
     if (loaded) {
       SplashScreen.hideAsync().then();
     }
-  }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  useEffect(() => {
     const subscription = Notifications.addNotificationReceivedListener(notification => {
       console.log('Notification received:', notification);
     });
 
     return () => subscription.remove();
-  }, []);
+
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <SessionProvider>

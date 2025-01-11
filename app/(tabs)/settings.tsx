@@ -1,8 +1,8 @@
 import ThemedSaveAreaView from "@/components/ThemedSaveAreaView";
 import { ThemedText } from "@/components/ThemedText";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { cn } from "@/components/utils/cn";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useSessionContext } from "@/context/SessionContext";
 
 const defaultClassLink = "text-white text-center p-2 rounded-xl font-bold text-lg"
@@ -24,9 +24,10 @@ export default function Settings() {
                 </Link>
             </>
           ||
-            <Link className={cn(defaultClassLink, "bg-orange-600")} onPress={removeToken} href="/">
-                Log out
-            </Link>
+            <Pressable className={cn(defaultClassLink, "bg-orange-600")} onPress={removeToken}>
+               <ThemedText style={{color:"white", textAlign:"center", fontWeight:"bold"}}>Log out</ThemedText>
+            </Pressable>
+
         }
       </View>
     </ThemedSaveAreaView>
