@@ -18,7 +18,7 @@ const schema = object({
 
 export type LoginRequest = InferType<typeof schema>;
 
-const defaultValues = { email: "a@a.com", password: "123" };
+const defaultValues = { email: "", password: "" };
 
 export default function Login() {
   const [isFetching, setIsFetching] = useState(false);
