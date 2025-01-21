@@ -69,8 +69,8 @@ export default function Register() {
           render={({ field }) => (
             <TextInput
               {...field}
+              secureTextEntry
               onChangeText={field.onChange}
-              keyboardType="email-address"
               className={cn("border border-gray-400 rounded-xl px-2 my-2", backgroundColor === "#151718" ? "text-white" : "text-black")}
             />
           )}
@@ -82,8 +82,8 @@ export default function Register() {
           render={({ field }) => (
             <TextInput
               {...field}
+              secureTextEntry
               onChangeText={field.onChange}
-              keyboardType="email-address"
               className={cn("border border-gray-400 rounded-xl px-2 my-2", backgroundColor === "#151718" ? "text-white" : "text-black")}
             />
           )}
