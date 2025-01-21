@@ -1,4 +1,3 @@
-import "@/utils/init-axios"
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCallback, } from "react";

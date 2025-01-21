@@ -23,6 +23,10 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState(SecureStore.getItem("token"));
   const router = useRouter();
 
+  if (token) {
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }
+
   const login = async (request: LoginRequest) => {
     try {
       const { data } = await axios.post("/login", request)

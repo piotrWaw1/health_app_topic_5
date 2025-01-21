@@ -41,6 +41,7 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
   const [bloodPressure, setBloodPressure] = useState<null | ItemType[]>(null);
   const [bloodSugarLevel, setBloodSugarLevel] = useState<null | ItemType[]>(null);
   const [weight, setWeight] = useState<null | ItemType[]>(null);
+
   const fetchData = async () => {
     try {
       const oxygenLevel = await SecureStore.getItemAsync(DataKeys.bloodOxygenLevel);
